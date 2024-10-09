@@ -15,5 +15,5 @@ void simon(int n)  //将赋予Simon的值赋予n
 {
     using namespace std;
     cout<<"He says "<<n<<" times hello"<<endl;
-
+   
 }

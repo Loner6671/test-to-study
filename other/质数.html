@@ -1,0 +1,89 @@
+<html></html>
+  <body>
+    <style>
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        background: #303030;
+      }
+      svg {
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+    <svg xmlns="http://www.w3.org/2000/svg">
+      <path fill="none" stroke="#FFFFFF" stroke-width="0.5" d="M0,0" />
+      <circle fill="#e91e63" cx="0" cy="0" r="0.5" />
+    </svg>
+    <script>
+      let width = 1280;
+      let height = 720;
+      let padding = 10;
+
+      const svg = document.querySelector("svg");
+      const path = document.querySelector("path");
+      const circle = document.querySelector("circle");
+
+      let n = 2;
+      let x = 0;
+      let y = 0;
+      let vx = -1;
+      let vy = 0;
+
+      const shouldTurn = () => {
+        if (n === 2) return true;
+        if (n % 2 === 0) return false;
+        let s = Math.sqrt(n);
+        for (let i = 3; i <= s; i++) {
+          if (n % i === 0) return false;
+        }
+        return true;
+      };
+
+      const turn = () => ([vx, vy] = [-vy, vx]);
+
+      const move = () => {
+        x += vx;
+        y += vy;
+      };
+
+      let pvx;
+      let pvy;
+      const draw = () => {
+        let d = path.getAttribute("d");
+        if (pvx === vx && pvy === vy) d = d.slice(0, d.lastIndexOf("L"));
+        path.setAttribute("d", d + "L" + x + "," + y);
+        circle.setAttribute("cx", x);
+        circle.setAttribute("cy", y);
+        pvx = vx;
+        pvy = vy;
+      };
+
+      const fit = () => {
+        let { x, y, width, height } = svg.getBBox();
+        svg.setAttribute(
+          "viewBox",
+          [
+            x - padding / 2,
+            y - padding / 2,
+            width + padding,
+            height + padding,
+          ].join(" ")
+        );
+      };
+
+      const step = async () => {
+        if (shouldTurn()) turn();
+        move();
+        draw();
+        fit();
+        n++;
+        window.requestAnimationFrame(step);
+      };
+
+      step();
+    </script>
+  </body>
+</html>

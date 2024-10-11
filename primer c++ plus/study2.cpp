@@ -2,7 +2,7 @@
 int main(void)
 {
     using namespace std;
-    int n_int = INT_MAX ;
-    cout<<"int_max="<<n_int<<endl;
+    
+    cout<<"let's eat g\u00A8tease.\n";
     system("pause");
 }

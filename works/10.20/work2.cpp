@@ -1,5 +1,12 @@
 #include<iostream>
+enum Weekday{SUNDAY,MONDAY,TUSEDAY,WENDAY,THURSDAY,FRISDAY,SATURDAY};
 int main(void)
 {
-    enum Weekday=[Sunday=1,Monday,Tuesday,]
+    using namespace std;
+    Weekday today=WENDAY;
+    cout<<"Today is "<<today<<endl;
+    int data;
+    data=WENDAY;
+    cout<<"day number is "<<data<<endl;
+    system("pause");
 }

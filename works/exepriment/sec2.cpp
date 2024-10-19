@@ -33,25 +33,25 @@ int main(void)
             b+=2;
         break;
     case 4:
-        double x,n,mi;
-        mi=1;
-        int y;
-        cout<<"Please tap in number:\n";
-        cout<<"x=";
-        cin>>x;
-        cout<<"n=";
-        cin>>n;
-        for(int i=1;i<=n;i++)
-        {                    
-            for(int a=1;a<=i;a++)                     
-            {    
-                for(int b=1;b<=2*i-1;b+=1)                
-                    mi*=a;
-                        
-                ans+=(pow(x,b)*pow(-1,i+1))/mi;                
-                mi=1;
-            }                
-        }        
+        double x, n, term = 0.0;
+        cout << "TAP IN NUMBER:\n";
+        cout << "x=";
+        cin >> x;
+        cout << "n="; 
+        cin >> n;
+        int sign = 1; 
+        for (int i = 0; i < n; i++)
+        {
+            int exp = 2 * i + 1; 
+            double mi = 1.0;
+            for (int j = 1; j <= exp; j++) 
+            {
+                mi *= j;
+            }
+        term = pow(x, exp)/mi; 
+        ans += sign * term;
+        sign*= -1;
+        }
         break;
     case 999:
         return 0;

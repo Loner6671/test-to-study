@@ -14,7 +14,7 @@ int combination(int n, int k)
     return factorial(n) / (factorial(k) * factorial(n - k));
 }
 
-int main() 
+int main()  
 {
     int n = 5;
     int k = 3;

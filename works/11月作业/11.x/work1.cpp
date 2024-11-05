@@ -1,14 +1,18 @@
 #include<iostream>
-#include<string>
+#include<cstring>
 using namespace std;
 int main(void)
 {
-    string fis;
-    string sec="a";
+    char fis[100];
+    char sec[]={"a"};
+    int num;
     cout<<"Please tap in a sentence"<<endl;
-    cin>>fis;
-    int num=sizeof(fis)/sizeof(sec);
-    cout<<sizeof(fis)<<endl<<sizeof(sec)<<endl;
+    cin.getline(fis,100);
+    for(int i=0;i<=100;i++)
+    {
+        if(fis[i]>='a' && fis[i]<='z' || fis[i]>='A' && fis[i]<='Z')
+            num++;
+    } 
     cout<<"This sentence has "<<num<<" characters"<<endl;
     system("pause");
 }

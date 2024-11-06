@@ -4,7 +4,7 @@ int main(void)
 {
     using namespace std;
     double x,y,ans=0;
-    cout<<"please tao in number"<<endl;
+    cout<<"please tao  in number"<<endl;
     cout<<"x=";
     cin>>x;
     cout<<"y=";

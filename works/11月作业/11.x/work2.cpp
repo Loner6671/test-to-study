@@ -1,24 +1,26 @@
 #include<iostream>
-int compare(int n[],int tar);
-int number(int m[]);
+int compare(int tar,int num,int n[]);
 using namespace std;
 int main(void)
 {
-    int num[100];
-    int tar;
+    int tar,n;
+    cout<<"Please tap in number's number:"<<endl;
+    cin>>n;
+    int num[n-1];
     cout<<"Please tap in number line:"<<endl;
-    for
+    for(int i=0;i<n;i++)
+        cin>>num[i];
     cout<<"Please tap in target number:"<<endl;
     cin>>tar;
-    compare(num,tar);
+    compare(tar,n,num);
     system("pause");
 }
-int compare(int n[],int tar)
+int compare(int tar,int num,int n[])
 {
-    int max=number(n)+1;
+    int max=n[num-1];
     int min=n[0];
     int mid1=(max+1)/2;
-    if(tar>n[max-1])
+    if(tar>n[num-1] || tar<n[0])
     {
         cout<<"error 404 not found"<<endl;
         return 0;
@@ -28,21 +30,12 @@ int compare(int n[],int tar)
         while(min<=max)
         {
             if(tar==n[mid1])
-                cout<<"The location is:"<<mid1<<endl;
+                {cout<<"The location is:"<<mid1<<endl;
+                return 0;}
             else if(tar<n[mid1])
                 mid1++;
             else
                 mid1--;
         }
     }
-}
-int number(int m[])
-{
-    int num;
-    for(int i=0;i<=100;i++)
-    {
-        if(m[i] != ' ')
-            num=m[i];
-    }
-    return num;
 }

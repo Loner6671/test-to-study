@@ -21,21 +21,18 @@ int compare(int tar,int num,int n[])
     int min=n[0];
     int mid1=(max+1)/2;
     if(tar>n[num-1] || tar<n[0])
-    {
         cout<<"error 404 not found"<<endl;
-        return 0;
-    }
     else
     {
         while(min<=max)
         {
             if(tar==n[mid1])
-                {cout<<"The location is:"<<mid1<<endl;
+                {cout<<"The location is:"<<mid1+1<<endl;
                 return 0;}
             else if(tar<n[mid1])
-                mid1++;
-            else
                 mid1--;
+            else
+                mid1++;
         }
     }
 }

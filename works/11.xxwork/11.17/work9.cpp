@@ -28,4 +28,5 @@ public:
 int main()
 {  
     Dog myDog; 
+    system("pause");
 }

@@ -20,7 +20,7 @@ int main(void)
         les(a,b,c);
     else
         equal(a,b,c);
-    system("pause");
+    system("pause"); 
 }
 void greate(double num1,double num2,double num3)
 {

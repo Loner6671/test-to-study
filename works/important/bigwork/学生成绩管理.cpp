@@ -1,9 +1,82 @@
-#include<iostream>
-#include<cstring>           // GB2312
-using namespace std;
+#include<iostream>                            
+#include<cstring>           // GBK编码 
+#include<fstream>
+using namespace std; 
+#define max 1000        // 定义最大学生数
 class CStudent
 {
 public:
+int student_num[max];
+void addstudent()        // 新增学生数据
+{
+    cout<<"请输入学生的编号：";
+    cin>>num;
+    cout<<"请输入学生的姓名：";
+    cin>>name;
+    cout<<"请输入学生的学号：";
+    cin>>stu_num;
+    cout<<"请输入学生的性别：";
+    cin>>gender;
+    cout<<"请输入学生的年龄：";
+    cin>>age;
+    cout<<"请输入学生的籍贯：";
+    cin>>native_place;
+    cout<<"请输入学生的专业：";
+    cin>>major;
+    cout<<"请输入学生的班级：";
+    cin>>class_num;     
+    cout<<"请输入学生的数学成绩：";
+    cin>>math_grade;
+    cout<<"请输入学生的计算机成绩：";
+    cin>>cs_grade;
+    cout<<"请输入学生的英语成绩：";
+    cin>>eng_grade;
+    cout<<"请输入学生的物理成绩：";
+    cin>>py_grade;     
+    cout<<"请输入学生的思想道德与法治成绩：";
+    cin>>df_grade;
+    cout<<"请输入学生的奖惩记录：";
+    cin>>record;
+    cout<<"学生数据添加成功！\n";
+    int save_data(num);
+    return;
+}
+int num;
+string name;
+int stu_num;
+char gender[2];
+int age;
+string native_place;
+string major;
+int class_num;
+int math_grade;
+int cs_grade;
+int eng_grade;
+int py_grade;
+int df_grade;
+string record;
+};
+void save_data(int num)
+{
+    CStudent a;
+    ofstream outfile("student.txt",ios::binary|ios::app);
+    outfile.write((char*)&a.student_num[num],sizeof(int));
+    outfile.write(a.name.c_str(),a.name.length()+1);
+    outfile.write((char*)&a.stu_num,sizeof(int));
+    outfile.write(a.gender,2);
+    outfile.write((char*)&a.age,sizeof(int));
+    outfile.write(a.native_place.c_str(),a.native_place.length()+1);
+    outfile.write(a.major.c_str(),a.major.length()+1);
+    outfile.write((char*)&a.class_num,sizeof(int));
+    outfile.write((char*)&a.math_grade,sizeof(int));
+    outfile.write((char*)&a.cs_grade,sizeof(int));
+    outfile.write((char*)&a.eng_grade,sizeof(int));
+    outfile.write((char*)&a.py_grade,sizeof(int));
+    outfile.write((char*)&a.df_grade,sizeof(int));
+    outfile.write(a.record.c_str(),a.record.length()+1);
+    outfile.close();
+    return;
+}
 void showmenu(void)        // 菜单
 {
     cout<<"******************************************************************************\n";
@@ -21,23 +94,90 @@ void showmenu(void)        // 菜单
     cout<<"************|****************************************************|************\n";
     cout<<"************|****************5、学生成绩处理**********************|************\n";
     cout<<"************|****************************************************|************\n";
+    cout<<"************|****************6、退出系统**************************|************\n";
+    cout<<"************|****************************************************|************\n";
     cout<<"************——————————————————————————————————————————————————————************\n";
     cout<<"******************************************************************************\n";
     cout<<"******************************************************************************\n";
     return;
 }
-private:
-int num;
-string name;
-char gender[2];
-int math_grade;
-int cs_grade;
-int fl_grade;
-
- 
-};
+void grademanage()        // 学生成绩处理
+{
+    int s_num;
+    cout<<"请输入学生的学号：";
+    cin>>s_num;
+    cout<<"******************************************************************************\n";
+    cout<<"************______________________________________________________************\n";
+    cout<<"************|****************************************************|************\n";
+    cout<<"************|****************1、列出学生的成绩*********************|************\n";
+    cout<<"************|****************************************************|************\n";
+    cout<<"************|****************2、计算学生平均分*********************|************\n";
+    cout<<"************|****************************************************|************\n";
+    cout<<"************|****************3、计算学生各科及总成绩排名************|************\n";
+    cout<<"************|****************************************************|************\n";
+    cout<<"************|****************4、计算学生GPA及排名******************|************\n";
+    cout<<"************|****************************************************|************\n";
+    cout<<"************|****************5、列出总成绩超过n分的特定性别学生*****|************\n";
+    cout<<"************|****************************************************|************\n";
+    cout<<"************|****************6、返回上一级************************|************\n";
+    cout<<"************|****************************************************|************\n";
+    cout<<"************——————————————————————————————————————————————————————************\n";
+    cout<<"******************************************************************************\n";
+    cout<<"******************************************************************************\n";
+    return;
+}
 int main()
 {
+    int num;
     CStudent a;
-    a.showmenu();
+    showmenu();
+    cout<<"请输入您的选择：";
+    cin>>num;
+    while(true)
+    {
+        switch (num)
+        {
+        case 1 :
+            a.addstudent();
+            break;
+        case 2 :
+
+            break;
+        case 3 :
+
+            break;
+        case 4 :
+
+            break;
+        case 5 :
+            grademanage();
+            cin>>num;
+            switch (num)
+            {
+            case 1 :
+                break;
+            case 2 :        
+                break;
+            case 3 :        
+                break;
+            case 4 :        
+                break;
+            case 5 :        
+                break;
+            case 6 : 
+                showmenu();
+                break;
+            default :        
+                cout<<"输入错误！\n";
+                break;
+            }
+            break;
+        case 6 :
+            return 0;
+            break;
+        default :
+            cout<<"输入错误！\n";
+            break;
+        }
+    }
 }

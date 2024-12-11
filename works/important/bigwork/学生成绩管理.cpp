@@ -2,15 +2,17 @@
 #include<string>           // GBK编码 
 #include<fstream>
 #include<cstring>
+#include<limits>
 using namespace std; 
 void showmenu(void) ;        // 菜单
-#define max 1000        // 定义最大学生数
+void len_string(ofstream& outfile, const string& st);       // 写入字符串长度
+#define max_stu 1000        // 定义最大学生数
 class CStudent
 {
 public:
 void save_data(const CStudent& student);
 int addstudent(void);
-int student_num[max];
+int student_num[max_stu];
 string name;
 int stu_num;
 char gender[2];
@@ -32,46 +34,164 @@ int CStudent::addstudent(void)        // 新增学生数据
     cin>>num1;
     if(num1==1)
     {
+        num1=-1;    
         return 0;
     }
     else if(num1==2)
     {
-    for(int i=0;i<max;i++)
-    {
-        student_num[i];
-    }
-    cout<<"请输入学生的姓名：";
-    cin>>name;
-    cout<<"请输入学生的学号：";
-    cin>>stu_num;
-    cout<<"请输入学生的性别：";
-    cin>>gender;
-    cout<<"请输入学生的年龄：";
-    cin>>age;
-    cout<<"请输入学生的籍贯：";
-    cin>>native_place;
-    cout<<"请输入学生的专业：";
-    cin>>major;
-    cout<<"请输入学生的班级：";
-    cin>>class_num;     
-    cout<<"请输入学生的数学成绩：";
-    cin>>math_grade;
-    cout<<"请输入学生的计算机成绩：";
-    cin>>cs_grade;
-    cout<<"请输入学生的英语成绩：";
-    cin>>eng_grade;
-    cout<<"请输入学生的物理成绩：";
-    cin>>py_grade;     
-    cout<<"请输入学生的思想道德与法治成绩：";
-    cin>>df_grade;
-    cout<<"请输入学生的奖惩记录：";
-    cin>>record;
-    cout<<"学生数据添加成功！\n";
-    save_data(*this);
+        num1=-1;
+        for(int i=0;i<max_stu;i++)
+        {
+            student_num[i];
+        }
+        cout<<"请输入学生的姓名：";
+        cin>>name;
+        while(true)
+        {
+            cout<<"请输入学生的学号：";
+            cin>>stu_num;
+            if (cin.fail())             // 检测输入是否失败
+            {  
+                cin.clear();  // 清除错误标志
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');  // 忽略错误输入
+                cout << "输入错误！请输入数字。\n";
+            } 
+            else
+                break;
+        }
+        cout<<"请输入学生的性别：";
+        cin>>gender;
+        while(true)
+        {
+            cout<<"请输入学生的年龄：";
+            cin>>age;
+            if(cin.fail())
+            {
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cout << "输入错误！请输入数字。\n";
+            }
+            else
+                break;
+        }
+        cout<<"请输入学生的籍贯：";
+        cin>>native_place;
+        cout<<"请输入学生的专业：";
+        cin>>major;
+        while(true)
+        {
+            cout<<"请输入学生的班级：";
+            cin>>class_num;
+            if(cin.fail())
+            {
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cout << "输入错误！请输入数字。\n";
+            }
+            else
+                break;
+        }    
+        while(true)
+        {
+            cout<<"请输入学生的数学成绩：";
+            cin>>math_grade;
+            if(cin.fail())
+            {
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cout << "输入错误！请输入数字。\n";
+            }
+            else
+                break;
+        }
+        while(true)
+        {
+            cout<<"请输入学生的计算机成绩：";
+            cin>>cs_grade;
+            if(cin.fail())
+            {
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cout << "输入错误！请输入数字。\n";
+            }
+            else
+                break;
+        }
+        while(true)
+        {
+            cout<<"请输入学生的英语成绩：";
+            cin>>eng_grade;
+            if(cin.fail())
+            {
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cout << "输入错误！请输入数字。\n";
+            }
+            else
+                break;
+        }
+        while(true)
+        {
+            cout<<"请输入学生的物理成绩：";
+            cin>>py_grade;
+            if(cin.fail())
+            {
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cout << "输入错误！请输入数字。\n";
+            }
+            else
+                break;
+        }
+        while(true)
+        {
+            cout<<"请输入学生的思想道德与法治成绩：";
+            cin>>df_grade;
+            if(cin.fail())
+            {
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cout << "输入错误！请输入数字。\n";
+            }
+            else
+                break;
+        }
+        cout<<"请输入学生的奖惩记录：";
+        cin>>record;
+        cout<<"学生数据添加成功！\n";
+        CStudent student;
+        ofstream ofs;
+        ofs.open("student.txt",ios::binary|ios::app);
+        if(!ofs)
+        {
+            cout<<"文件打开失败！\n";
+            num1=-1;
+            return 0;
+        }   
+        else
+        {
+            ofs.write((const char*)&student.student_num, sizeof(student.student_num));
+            len_string(ofs, student.name);
+            ofs.write((const char*)&student.stu_num, sizeof(student.stu_num));
+            len_string(ofs, student.gender);
+            ofs.write((const char*)&student.age, sizeof(student.age));
+            len_string(ofs, student.native_place);
+            len_string(ofs, student.major);
+            ofs.write((const char*)&student.class_num, sizeof(student.class_num));
+            ofs.write((const char*)&student.math_grade, sizeof(student.math_grade));
+            ofs.write((const char*)&student.cs_grade, sizeof(student.cs_grade));
+            ofs.write((const char*)&student.eng_grade, sizeof(student.eng_grade));
+            ofs.write((const char*)&student.py_grade, sizeof(student.py_grade));
+            ofs.write((const char*)&student.df_grade, sizeof(student.df_grade));
+            len_string(ofs, student.record);
+        }
+        ofs.close();
+        return 0;
     }
     else
     {
         cout<<"输入错误！\n";
+        num1=-1;
         return 0;
     }
     return 0;
@@ -81,36 +201,6 @@ void len_string(ofstream& outfile, const string& st)        // 写入字符串长度
     size_t length = st.size(); // 获取字符串长度
     outfile.write(reinterpret_cast<const char*>(&length), sizeof(length)); // 写入长度
     outfile.write(st.c_str(), length); // 写入字符串数据
-}
-void save_data(const CStudent& student)         // 保存学生数据 
-{
-    CStudent student;
-    ofstream ofs;
-    ofs.open("student.dat",ios::binary|ios::app);
-    if(!ofs)
-    {
-        cout<<"文件打开失败！\n";
-        return;
-    }   
-    else
-    {
-        ofs.write((const char*)&student.student_num, sizeof(student.student_num));
-        len_string(ofs, student.name);
-        ofs.write((const char*)&student.stu_num, sizeof(student.stu_num));
-        len_string(ofs, student.gender);
-        ofs.write((const char*)&student.age, sizeof(student.age));
-        len_string(ofs, student.native_place);
-        len_string(ofs, student.major);
-        ofs.write((const char*)&student.class_num, sizeof(student.class_num));
-        ofs.write((const char*)&student.math_grade, sizeof(student.math_grade));
-        ofs.write((const char*)&student.cs_grade, sizeof(student.cs_grade));
-        ofs.write((const char*)&student.eng_grade, sizeof(student.eng_grade));
-        ofs.write((const char*)&student.py_grade, sizeof(student.py_grade));
-        ofs.write((const char*)&student.df_grade, sizeof(student.df_grade));
-        len_string(ofs, student.record);
-    }
-    ofs.close();
-    return;
 }
 void showmenu(void)        // 菜单
 {
@@ -172,17 +262,15 @@ int main()
         cin>>num;
         switch (num)
         {
+        num=-1;
         case 1 :
             a.addstudent();
             break;
         case 2 :
-
             break;
         case 3 :
-
             break;
         case 4 :
-
             break;
         case 5 :
             grademanage();

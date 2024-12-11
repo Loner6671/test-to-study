@@ -1,16 +1,45 @@
 #include<iostream>                            
-#include<cstring>           // GBK编码 
+#include<string>           // GBK编码 
 #include<fstream>
+#include<cstring>
 using namespace std; 
+void showmenu(void) ;        // 菜单
 #define max 1000        // 定义最大学生数
 class CStudent
 {
 public:
+void save_data(const CStudent& student);
+int addstudent(void);
 int student_num[max];
-void addstudent()        // 新增学生数据
+string name;
+int stu_num;
+char gender[2];
+int age;
+string native_place;
+string major;
+int class_num;
+int math_grade;
+int cs_grade;
+int eng_grade;
+int py_grade;
+int df_grade;
+string record;
+};
+int CStudent::addstudent(void)        // 新增学生数据
 {
-    cout<<"请输入学生的编号：";
-    cin>>num;
+    cout<<"1:返回上一级\n2:新增学生数据\n";
+    int num1 ;
+    cin>>num1;
+    if(num1==1)
+    {
+        return 0;
+    }
+    else if(num1==2)
+    {
+    for(int i=0;i<max;i++)
+    {
+        student_num[i];
+    }
     cout<<"请输入学生的姓名：";
     cin>>name;
     cout<<"请输入学生的学号：";
@@ -38,43 +67,49 @@ void addstudent()        // 新增学生数据
     cout<<"请输入学生的奖惩记录：";
     cin>>record;
     cout<<"学生数据添加成功！\n";
-    int save_data(num);
-    return;
+    save_data(*this);
+    }
+    else
+    {
+        cout<<"输入错误！\n";
+        return 0;
+    }
+    return 0;
 }
-int num;
-string name;
-int stu_num;
-char gender[2];
-int age;
-string native_place;
-string major;
-int class_num;
-int math_grade;
-int cs_grade;
-int eng_grade;
-int py_grade;
-int df_grade;
-string record;
-};
-void save_data(int num)
+void len_string(ofstream& outfile, const string& st)        // 写入字符串长度
 {
-    CStudent a;
-    ofstream outfile("student.txt",ios::binary|ios::app);
-    outfile.write((char*)&a.student_num[num],sizeof(int));
-    outfile.write(a.name.c_str(),a.name.length()+1);
-    outfile.write((char*)&a.stu_num,sizeof(int));
-    outfile.write(a.gender,2);
-    outfile.write((char*)&a.age,sizeof(int));
-    outfile.write(a.native_place.c_str(),a.native_place.length()+1);
-    outfile.write(a.major.c_str(),a.major.length()+1);
-    outfile.write((char*)&a.class_num,sizeof(int));
-    outfile.write((char*)&a.math_grade,sizeof(int));
-    outfile.write((char*)&a.cs_grade,sizeof(int));
-    outfile.write((char*)&a.eng_grade,sizeof(int));
-    outfile.write((char*)&a.py_grade,sizeof(int));
-    outfile.write((char*)&a.df_grade,sizeof(int));
-    outfile.write(a.record.c_str(),a.record.length()+1);
-    outfile.close();
+    size_t length = st.size(); // 获取字符串长度
+    outfile.write(reinterpret_cast<const char*>(&length), sizeof(length)); // 写入长度
+    outfile.write(st.c_str(), length); // 写入字符串数据
+}
+void save_data(const CStudent& student)         // 保存学生数据 
+{
+    CStudent student;
+    ofstream ofs;
+    ofs.open("student.dat",ios::binary|ios::app);
+    if(!ofs)
+    {
+        cout<<"文件打开失败！\n";
+        return;
+    }   
+    else
+    {
+        ofs.write((const char*)&student.student_num, sizeof(student.student_num));
+        len_string(ofs, student.name);
+        ofs.write((const char*)&student.stu_num, sizeof(student.stu_num));
+        len_string(ofs, student.gender);
+        ofs.write((const char*)&student.age, sizeof(student.age));
+        len_string(ofs, student.native_place);
+        len_string(ofs, student.major);
+        ofs.write((const char*)&student.class_num, sizeof(student.class_num));
+        ofs.write((const char*)&student.math_grade, sizeof(student.math_grade));
+        ofs.write((const char*)&student.cs_grade, sizeof(student.cs_grade));
+        ofs.write((const char*)&student.eng_grade, sizeof(student.eng_grade));
+        ofs.write((const char*)&student.py_grade, sizeof(student.py_grade));
+        ofs.write((const char*)&student.df_grade, sizeof(student.df_grade));
+        len_string(ofs, student.record);
+    }
+    ofs.close();
     return;
 }
 void showmenu(void)        // 菜单
@@ -82,19 +117,19 @@ void showmenu(void)        // 菜单
     cout<<"******************************************************************************\n";
     cout<<"************______________________________________________________************\n";
     cout<<"************|****************************************************|************\n";
-    cout<<"************|***************欢迎来到学生学籍管理系统***************|************\n";
+    cout<<"************|***************欢迎来到学生学籍管理系统*************|************\n";
     cout<<"************|****************************************************|************\n";
-    cout<<"************|****************1、新增学生数据**********************|************\n";
+    cout<<"************|****************1、新增学生数据*********************|************\n";
     cout<<"************|****************************************************|************\n";
-    cout<<"************|****************2、更改学生数据**********************|************\n";
+    cout<<"************|****************2、更改学生数据*********************|************\n";
     cout<<"************|****************************************************|************\n";
-    cout<<"************|****************3、查找学生数据**********************|************\n";
+    cout<<"************|****************3、查找学生数据*********************|************\n";
     cout<<"************|****************************************************|************\n";
-    cout<<"************|****************4、删除学生数据**********************|************\n";
+    cout<<"************|****************4、删除学生数据*********************|************\n";
     cout<<"************|****************************************************|************\n";
-    cout<<"************|****************5、学生成绩处理**********************|************\n";
+    cout<<"************|****************5、学生成绩处理*********************|************\n";
     cout<<"************|****************************************************|************\n";
-    cout<<"************|****************6、退出系统**************************|************\n";
+    cout<<"************|****************6、退出系统*************************|************\n";
     cout<<"************|****************************************************|************\n";
     cout<<"************——————————————————————————————————————————————————————************\n";
     cout<<"******************************************************************************\n";
@@ -109,17 +144,17 @@ void grademanage()        // 学生成绩处理
     cout<<"******************************************************************************\n";
     cout<<"************______________________________________________________************\n";
     cout<<"************|****************************************************|************\n";
-    cout<<"************|****************1、列出学生的成绩*********************|************\n";
+    cout<<"************|****************1、列出学生的成绩********************|************\n";
     cout<<"************|****************************************************|************\n";
-    cout<<"************|****************2、计算学生平均分*********************|************\n";
+    cout<<"************|****************2、计算学生平均分********************|************\n";
     cout<<"************|****************************************************|************\n";
-    cout<<"************|****************3、计算学生各科及总成绩排名************|************\n";
+    cout<<"************|****************3、计算学生各科及总成绩排名***********|************\n";
     cout<<"************|****************************************************|************\n";
-    cout<<"************|****************4、计算学生GPA及排名******************|************\n";
+    cout<<"************|****************4、计算学生GPA及排名*****************|************\n";
     cout<<"************|****************************************************|************\n";
-    cout<<"************|****************5、列出总成绩超过n分的特定性别学生*****|************\n";
+    cout<<"************|****************5、列出总成绩超过n分的特定性别学生****|************\n";
     cout<<"************|****************************************************|************\n";
-    cout<<"************|****************6、返回上一级************************|************\n";
+    cout<<"************|****************6、返回上一级***********************|************\n";
     cout<<"************|****************************************************|************\n";
     cout<<"************——————————————————————————————————————————————————————************\n";
     cout<<"******************************************************************************\n";
@@ -130,11 +165,11 @@ int main()
 {
     int num;
     CStudent a;
-    showmenu();
-    cout<<"请输入您的选择：";
-    cin>>num;
     while(true)
     {
+        showmenu();
+        cout<<"请输入您的选择：";
+        cin>>num;
         switch (num)
         {
         case 1 :

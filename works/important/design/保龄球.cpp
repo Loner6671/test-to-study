@@ -122,6 +122,7 @@ int sum()
 int main()
 {
     int summary[9];
+    int num1=0,num2=0;
     for(int i=0;i<10;i++)
     {
         summary[i]=sum();
@@ -129,7 +130,22 @@ int main()
     char name[10]={'a','b','c','d','e','f','g','h','i','j'};
     for(int j=0;j<10;j++)
     {
-        cout<<name[j]<<" "<<summary[j]<<endl;
+        for(int k=0;k<10;k++)
+        {
+           if(summary[k]<=summary[j])
+           {
+               num1=summary[k];
+               summary[k]=summary[j];
+               summary[j]=num1;
+           }
+        }
+    }
+    for(int l=0;l<10;l++)
+    {
+        ofstream outfile;
+        outfile.open("score.txt",ios::app);
+        outfile<<name[l]<<" "<<summary[l]<<endl;
+        outfile.close();
     }
     system("pause");
 }

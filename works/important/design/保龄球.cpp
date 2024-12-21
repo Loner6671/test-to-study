@@ -35,12 +35,15 @@ int sort(int all_score[10][10])
     }
     ofstream outfile;
     outfile.open("score.txt",ios::app);
-    outfile<<"排名\n";
+    outfile<<"����\n";
+    cout<<"����\n";
     for(int m=0;m<10;m++)
     {
         outfile<<name[m]<<" : "<<summary[m]<<"  ";
+        cout<<name[m]<<" : "<<summary[m]<<"  ";
     }
     outfile<<"\n\n";
+    cout<<"\n\n";
     outfile.close();
     return 0;
 }
@@ -52,13 +55,17 @@ int write_file(int all_score[10][10])
     outfile.open("score.txt",ios::app);
     for(int i=0;i<10;i++)
     {
-        outfile<<"第"<<i+1<<"轮\n";
+        outfile<<"��"<<i+1<<"��\n";
+        cout<<"��"<<i+1<<"��\n";
         for(int j=0;j<10;j++)
         {
             outfile<<name[j]<<": "<<all_score[i][j]<<"  ";
+            cout<<name[j]<<": "<<all_score[i][j]<<"  ";
         }
         outfile<<"\n\n";
-        outfile<<"目前总分："<<"  ";
+        cout<<"\n\n";
+        outfile<<"Ŀǰ�ܷ֣�"<<"  ";
+        cout<<"Ŀǰ�ܷ֣�"<<"  ";
         for(int k=0;k<10;k++)
         {
             for(int l=0;l<=i;l++)
@@ -66,9 +73,11 @@ int write_file(int all_score[10][10])
                 sum+=all_score[l][k];
             }
             outfile<<name[k]<<" :"<<sum<<"  ";
+            cout<<name[k]<<" :"<<sum<<"  ";
             sum=0;
         }
         outfile<<"\n\n";
+        cout<<"\n\n";
     }
     outfile.close();
     return 0;
@@ -204,9 +213,3 @@ int main()
     sum();
     system("pause");
 }
-//待完善：
-//图形界面版保龄球程序
-//实力值系统
-//自定义参赛选手
-//排名系统
-//赛程记录，实时比分

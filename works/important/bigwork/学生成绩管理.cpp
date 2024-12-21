@@ -1,7 +1,6 @@
 #include<iostream>                            
 #include<string>           // GBK编码 
 #include<fstream>
-#include<cstring>
 #include<limits>
 using namespace std;
 void showmenu(void) ;        // 菜单
@@ -14,7 +13,7 @@ int search_student(void);
 int student_num;
 string name;
 int stu_num;
-char gender[2];
+string gender;
 int age;
 string native_place;
 string major;
@@ -25,15 +24,26 @@ int eng_grade;
 int py_grade;
 int df_grade;
 string record;
-};
-void len_string(ofstream& ofs, const string& str)
+CStudent():student_num(0),name(""),stu_num(0),gender(""),age(0),native_place(""),major(""),class_num(0),math_grade(0),
+cs_grade(0),eng_grade(0),py_grade(0),df_grade(0),record(""){}
+
+CStudent(int student_num,string name,int stu_num,string gender,int age,string native_place,string major,int class_num,int math_grade,
+int cs_grade,int eng_grade,int py_grade,int df_grade,string record)
+:student_num(student_num),name(name),stu_num(stu_num),gender(gender),age(age),native_place(native_place),major(major),
+class_num(class_num),math_grade(math_grade),cs_grade(cs_grade),eng_grade(eng_grade),py_grade(py_grade),df_grade(df_grade),record(record){}
+
+friend ostream& operator<<(ostream& os, const CStudent& student)
 {
-    int len=str.length();
-    ofs.write((const char*)&len, sizeof(len));
-    ofs.write(str.c_str(), len);
+    os<<"编号"<<student.student_num<<"\t姓名"<<student.name<<"\t学号"<<student.stu_num<<"\t性别"<<student.gender<<"\t年龄"<<student.age<<
+    "\t籍贯"<<student.native_place<<"\t专业"<<student.major<<"\t班级"<<student.class_num<<"\t数学成绩"<<student.math_grade<<"\t计算机成绩"<<
+    student.cs_grade<<"\t英语成绩"<<student.eng_grade<<"\t物理成绩"<<student.py_grade<<"\t思想道德与法治成绩"<<student.df_grade<<"\t奖惩记录"<<
+    student.record<<endl;
+    return os;
 }
-int CStudent::add_student(void)        // 新增学生数据
+}; 
+int add_student(const string& filename)        // 新增学生数据
 {
+    CStudent student;
     cout<<"1:返回上一级\n2:新增学生数据\n";
     int num1 ;
     cin>>num1;
@@ -45,26 +55,33 @@ int CStudent::add_student(void)        // 新增学生数据
     else if(num1==2)
     {
         num1=-1;
-        cout<<"请输入学生的编号：";
-        cin>>student_num;
-        if(cin.fail())
+        while(true)
         {
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "输入错误！请输入数字。\n";
-        }
-        else if(student_num<0 || student_num>1000)
-        {
-            cout<<"输入错误！编号超出范围！\n";
-            num1=-1;
-            return 0;
+            cout<<"请输入学生的编号：";
+            cin>>student.student_num;
+            if(cin.fail())
+            {
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cout << "输入错误！请输入数字。\n";
+            }
+            else if(student.student_num<0 || student.student_num>1000)
+            {
+                cout<<"输入错误！编号超出范围！\n";
+                num1=-1;
+                return 0;
+            }
+            else
+            {
+                break;
+            }
         }
         cout<<"请输入学生的姓名：";
-        cin>>name;
+        cin>>student.name;
         while(true)
         {
             cout<<"请输入学生的学号：";
-            cin>>stu_num;
+            cin>>student.stu_num;
             if (cin.fail())             // 检测输入是否失败
             {  
                 cin.clear();        // 清除错误标志
@@ -74,12 +91,12 @@ int CStudent::add_student(void)        // 新增学生数据
             else
                 break;
         }
-        cout<<"请输入学生的性别：";
-        cin>>gender;
+        cout<<"请输入学生的性别(m/f): ";
+        cin>>student.gender;
         while(true)
         {
             cout<<"请输入学生的年龄：";
-            cin>>age;
+            cin>>student.age;
             if(cin.fail())
             {
                 cin.clear();
@@ -90,13 +107,13 @@ int CStudent::add_student(void)        // 新增学生数据
                 break;
         }
         cout<<"请输入学生的籍贯：";
-        cin>>native_place;
+        cin>>student.native_place;
         cout<<"请输入学生的专业：";
-        cin>>major;
+        cin>>student.major;
         while(true)
         {
             cout<<"请输入学生的班级：";
-            cin>>class_num;
+            cin>>student.class_num;
             if(cin.fail())
             {
                 cin.clear();
@@ -109,7 +126,7 @@ int CStudent::add_student(void)        // 新增学生数据
         while(true)
         {
             cout<<"请输入学生的数学成绩：";
-            cin>>math_grade;
+            cin>>student.math_grade;
             if(cin.fail())
             {
                 cin.clear();
@@ -122,7 +139,7 @@ int CStudent::add_student(void)        // 新增学生数据
         while(true)
         {
             cout<<"请输入学生的计算机成绩：";
-            cin>>cs_grade;
+            cin>>student.cs_grade;
             if(cin.fail())
             {
                 cin.clear();
@@ -135,7 +152,7 @@ int CStudent::add_student(void)        // 新增学生数据
         while(true)
         {
             cout<<"请输入学生的英语成绩：";
-            cin>>eng_grade;
+            cin>>student.eng_grade;
             if(cin.fail())
             {
                 cin.clear();
@@ -148,7 +165,7 @@ int CStudent::add_student(void)        // 新增学生数据
         while(true)
         {
             cout<<"请输入学生的物理成绩：";
-            cin>>py_grade;
+            cin>>student.py_grade;
             if(cin.fail())
             {
                 cin.clear();
@@ -161,7 +178,7 @@ int CStudent::add_student(void)        // 新增学生数据
         while(true)
         {
             cout<<"请输入学生的思想道德与法治成绩：";
-            cin>>df_grade;
+            cin>>student.df_grade;
             if(cin.fail())
             {
                 cin.clear();
@@ -172,11 +189,9 @@ int CStudent::add_student(void)        // 新增学生数据
                 break;
         }
         cout<<"请输入学生的奖惩记录：";
-        cin>>record;
-        cout<<"学生数据添加成功！\n";
-        CStudent student;
+        cin>>student.record;
         ofstream ofs;
-        ofs.open("student.txt",ios::binary|ios::app);
+        ofs.open("student.dat",ios::binary|ios::app);
         if(!ofs)
         {
             cout<<"文件打开失败！\n";
@@ -185,8 +200,8 @@ int CStudent::add_student(void)        // 新增学生数据
         }   
         else
         {
-            ofstream ofs;
-            ofs.open("student.txt",ios::binary|ios::app);
+            fstream ofs;
+            ofs.open("student.dat",ios::binary|ios::in|ios::out);
             if(!ofs)
             {
                 cout<<"文件打开失败！\n";
@@ -195,20 +210,9 @@ int CStudent::add_student(void)        // 新增学生数据
             }
             else
             {
-                ofs.write((const char*)&student.student_num, sizeof(student.student_num));
-                len_string(ofs, student.name);
-                ofs.write((const char*)&student.stu_num, sizeof(student.stu_num));
-                len_string(ofs, student.gender);
-                ofs.write((const char*)&student.age, sizeof(student.age));
-                len_string(ofs, student.native_place);
-                len_string(ofs, student.major);
-                ofs.write((const char*)&student.class_num, sizeof(student.class_num));
-                ofs.write((const char*)&student.math_grade, sizeof(student.math_grade));
-                ofs.write((const char*)&student.cs_grade, sizeof(student.cs_grade));
-                ofs.write((const char*)&student.eng_grade, sizeof(student.eng_grade));
-                ofs.write((const char*)&student.py_grade, sizeof(student.py_grade));
-                ofs.write((const char*)&student.df_grade, sizeof(student.df_grade));
-                len_string(ofs, student.record);
+                ofs.seekp((student.student_num-1)*sizeof(CStudent));
+                ofs.write((char*)&student,sizeof(CStudent));
+                cout<<"学生数据添加成功！\n";
             }
         }
         ofs.close();
@@ -222,8 +226,9 @@ int CStudent::add_student(void)        // 新增学生数据
     }
     return 0;
 }
-int CStudent::search_student(void)        // 查找学生数据
+int search_student(const string& filename)        // 查找学生数据
 {
+    CStudent student;
     int num1,num2=0;
     cout<<"1:返回上一级\n2:查找学生数据\n";
     cin>>num1;
@@ -250,30 +255,29 @@ int CStudent::search_student(void)        // 查找学生数据
         }   
         else
         {
-            for(int i=0;i<=num2;i++)  
+        
+            ifstream ifs;
+            ifs.open("student.dat",ios::binary|ios::in);
+            if(!ifs)
             {
-                ifstream ifs;
-                ofstream ofs;
-                ifs.open("student.txt",ios::binary|ios::in);
-                if(!ifs)
+                cout<<"文件打开失败！\n";                    num1=-1;
+                return 0;
+            }
+            else
+            {
+                ifs.seekg((num2-1)*sizeof(CStudent));
+                ifs.read(reinterpret_cast<char*>(&student),sizeof(CStudent));
+                if(ifs.eof()||student.student_num!=0)    
                 {
-                    cout<<"文件打开失败！\n";
-                    num1=-1;
-                    return 0;
-                }
+                    cerr<<"学生数据不存在！\n";
+                }            
                 else
                 {
-                    for(int i=0;i<=num2;i++)
-                    {
-                        ifs.seekg(i*sizeof(CStudent),ios::beg);
-                        if(i==num2)
-                        {
-                            
-                        }
-                    } 
+                    cout<<student;
                 }
-            }    
-        }
+                ifs.close();
+            } 
+        }    
     }
     else
     {
@@ -345,12 +349,12 @@ int main()
         {
             num=-1;
             case 1 :
-                a.add_student();
+                add_student("student.dat");
                 break;
             case 2 :
                 break;
             case 3 :
-                a.search_student();
+                search_student("student.dat");
                 break;
             case 4 :
                 break;

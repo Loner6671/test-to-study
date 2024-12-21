@@ -5,15 +5,13 @@
 #include<limits>
 using namespace std;
 void showmenu(void) ;        // 菜单
-void len_string(ofstream& outfile, const string& st);       // 写入字符串长度
-#define max_stu 1000        // 定义最大学生数
 class CStudent
 {
 public:
 void save_data(const CStudent& student);
 int add_student(void);
 int search_student(void);
-int student_num[max_stu];
+int student_num;
 string name;
 int stu_num;
 char gender[2];
@@ -28,6 +26,12 @@ int py_grade;
 int df_grade;
 string record;
 };
+void len_string(ofstream& ofs, const string& str)
+{
+    int len=str.length();
+    ofs.write((const char*)&len, sizeof(len));
+    ofs.write(str.c_str(), len);
+}
 int CStudent::add_student(void)        // 新增学生数据
 {
     cout<<"1:返回上一级\n2:新增学生数据\n";
@@ -41,9 +45,19 @@ int CStudent::add_student(void)        // 新增学生数据
     else if(num1==2)
     {
         num1=-1;
-        for(int i=0;i<max_stu;i++)
+        cout<<"请输入学生的编号：";
+        cin>>student_num;
+        if(cin.fail())
         {
-            student_num[i];
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "输入错误！请输入数字。\n";
+        }
+        else if(student_num<0 || student_num>1000)
+        {
+            cout<<"输入错误！编号超出范围！\n";
+            num1=-1;
+            return 0;
         }
         cout<<"请输入学生的姓名：";
         cin>>name;
@@ -171,20 +185,31 @@ int CStudent::add_student(void)        // 新增学生数据
         }   
         else
         {
-            ofs.write((const char*)&student.student_num, sizeof(student.student_num));
-            len_string(ofs, student.name);
-            ofs.write((const char*)&student.stu_num, sizeof(student.stu_num));
-            len_string(ofs, student.gender);
-            ofs.write((const char*)&student.age, sizeof(student.age));
-            len_string(ofs, student.native_place);
-            len_string(ofs, student.major);
-            ofs.write((const char*)&student.class_num, sizeof(student.class_num));
-            ofs.write((const char*)&student.math_grade, sizeof(student.math_grade));
-            ofs.write((const char*)&student.cs_grade, sizeof(student.cs_grade));
-            ofs.write((const char*)&student.eng_grade, sizeof(student.eng_grade));
-            ofs.write((const char*)&student.py_grade, sizeof(student.py_grade));
-            ofs.write((const char*)&student.df_grade, sizeof(student.df_grade));
-            len_string(ofs, student.record);
+            ofstream ofs;
+            ofs.open("student.txt",ios::binary|ios::app);
+            if(!ofs)
+            {
+                cout<<"文件打开失败！\n";
+                num1=-1;
+                return 0;
+            }
+            else
+            {
+                ofs.write((const char*)&student.student_num, sizeof(student.student_num));
+                len_string(ofs, student.name);
+                ofs.write((const char*)&student.stu_num, sizeof(student.stu_num));
+                len_string(ofs, student.gender);
+                ofs.write((const char*)&student.age, sizeof(student.age));
+                len_string(ofs, student.native_place);
+                len_string(ofs, student.major);
+                ofs.write((const char*)&student.class_num, sizeof(student.class_num));
+                ofs.write((const char*)&student.math_grade, sizeof(student.math_grade));
+                ofs.write((const char*)&student.cs_grade, sizeof(student.cs_grade));
+                ofs.write((const char*)&student.eng_grade, sizeof(student.eng_grade));
+                ofs.write((const char*)&student.py_grade, sizeof(student.py_grade));
+                ofs.write((const char*)&student.df_grade, sizeof(student.df_grade));
+                len_string(ofs, student.record);
+            }
         }
         ofs.close();
         return 0;
@@ -196,21 +221,6 @@ int CStudent::add_student(void)        // 新增学生数据
         return 0;
     }
     return 0;
-}
-void len_string(ofstream& outfile, const string& st)        // 写入字符串长度
-{
-    size_t length = st.size();          // 获取字符串长度
-    outfile.write(reinterpret_cast<const char*>(&length), sizeof(length));          //转换指针类型并写入字符串长度 
-    outfile.write(st.c_str(), length);              // 写入字符串数据
-}
-void read_string(ifstream& infile, string& st)        // 读取字符串
-{
-    size_t length = st.size();
-    infile.read(reinterpret_cast<char*>(&length), sizeof(length));
-    char* buffer = new char[length];
-    infile.read(buffer, length);
-    st.assign(buffer, length);
-    delete[] buffer;
 }
 int CStudent::search_student(void)        // 查找学生数据
 {
@@ -232,7 +242,7 @@ int CStudent::search_student(void)        // 查找学生数据
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
             cout << "输入错误！请输入数字。\n";
         }
-        else if(num2<0 || num2>max_stu)
+        else if(num2<0 || num2> 1000)
         {
             cout<<"输入错误！编号超出范围！\n"; 
             num1=-1;
@@ -240,7 +250,7 @@ int CStudent::search_student(void)        // 查找学生数据
         }   
         else
         {
-            for(int i=0;i<=num2;i++)
+            for(int i=0;i<=num2;i++)  
             {
                 ifstream ifs;
                 ofstream ofs;
@@ -258,34 +268,7 @@ int CStudent::search_student(void)        // 查找学生数据
                         ifs.seekg(i*sizeof(CStudent),ios::beg);
                         if(i==num2)
                         {
-                            CStudent student;
-                            ifs.read((char*)&student.student_num, sizeof(student.student_num));
-                            cout<<student.student_num<<"\t";
-                            read_string(ifs,student.name);
-                            cout<<student.name<<"\t";
-                            read_string(ifs,student.gender);
-                            cout<<student.gender<<"\t";
-                            ifs.read((char*)&student.age, sizeof(student.age));
-                            cout<<student.age<<"\t";
-                            read_string(ifs,student.native_place);
-                            cout<<student.native_place<<"\t";
-                            read_string(ifs,student.major);
-                            cout<<student.major<<"\t";
-                            ifs.read((char*)&student.class_num, sizeof(student.class_num));
-                            cout<<student.class_num<<"\t";
-                            ifs.read((char*)&student.math_grade, sizeof(student.math_grade));
-                            cout<<student.math_grade<<"\t";
-                            ifs.read((char*)&student.cs_grade, sizeof(student.cs_grade));
-                            cout<<student.cs_grade<<"\t";
-                            ifs.read((char*)&student.eng_grade, sizeof(student.eng_grade));
-                            cout<<student.eng_grade<<"\t";
-                            ifs.read((char*)&student.py_grade, sizeof(student.py_grade));       
-                            cout<<student.py_grade<<"\t";
-                            ifs.read((char*)&student.df_grade, sizeof(student.df_grade));
-                            cout<<student.df_grade<<"\t";
-                            read_string(ifs, student.record);
-                            cout<<student.record<<"\n";
-                            ifs.close();
+                            
                         }
                     } 
                 }

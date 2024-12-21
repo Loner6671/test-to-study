@@ -128,6 +128,7 @@ int main()
         summary[i]=sum();
     }
     char name[10]={'a','b','c','d','e','f','g','h','i','j'};
+    char middle[2]={};
     for(int j=0;j<10;j++)
     {
         for(int k=0;k<10;k++)
@@ -135,8 +136,11 @@ int main()
            if(summary[k]<=summary[j])
            {
                num1=summary[k];
+               middle[1]=name[k];
                summary[k]=summary[j];
+               name[k]=name[j];
                summary[j]=num1;
+               name[j]=middle[1];
            }
         }
     }

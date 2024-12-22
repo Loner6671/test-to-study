@@ -2,13 +2,26 @@
 #include<cstring>
 #include<fstream>
 #include<ctime>
+#include<vector>
 using namespace std;
-int sort(int all_score[10][10])
+int all_score[10][10]={0};
+int summary[10]={0};
+char name[10]={'a','b','c','d','e','f','g','h','i','j'};
+class Player
 {
-    char name[10]={'a','b','c','d','e','f','g','h','i','j'};
-    char middle[2]={};
-    int summary[10]={0};
-    int num1=0,sum=0;
+public:
+    Player(string name,int score)
+    {
+        this->pl_name=name;
+        this->pl_score=score;
+    }
+    string pl_name;
+    int pl_score;
+    vector<Player> pl;
+};
+int summary_score()
+{
+    int sum;
     for(int i=0;i<10;i++)
     {
         for(int l=0;l<10;l++)
@@ -18,18 +31,27 @@ int sort(int all_score[10][10])
         summary[i]=sum;
         sum=0;
     }
+}
+int sort()
+{
+    char middle[2]={};
+    int s_summary[10]={0};
+    char s_name[10]={};
+    int num1=0,sum=0;
+    memcpy(s_summary,summary,10*sizeof(int));
+    memcpy(s_name,name,10*sizeof(char));
     for(int j=0;j<10;j++)
     {
         for(int k=0;k<10;k++)
         {
-           if(summary[k]<=summary[j])
+           if(s_summary[k]<=s_summary[j])
            {
-               num1=summary[k];
-               middle[1]=name[k];
-               summary[k]=summary[j];
-               name[k]=name[j];
-               summary[j]=num1;
-               name[j]=middle[1];
+               num1=s_summary[k];
+               middle[1]=s_name[k];
+               s_summary[k]=s_summary[j];
+               s_name[k]=s_name[j];
+               s_summary[j]=num1;
+               s_name[j]=middle[1];
            }
         }
     }
@@ -39,17 +61,16 @@ int sort(int all_score[10][10])
     cout<<"排名\n";
     for(int m=0;m<10;m++)
     {
-        outfile<<name[m]<<" : "<<summary[m]<<"  ";
-        cout<<name[m]<<" : "<<summary[m]<<"  ";
+        outfile<<s_name[m]<<" : "<<s_summary[m]<<"  ";
+        cout<<s_name[m]<<" : "<<s_summary[m]<<"  ";
     }
     outfile<<"\n\n";
     cout<<"\n\n";
     outfile.close();
     return 0;
 }
-int write_file(int all_score[10][10])
+int write_file()
 {
-    char name[10]={'a','b','c','d','e','f','g','h','i','j'};
     int sum;
     ofstream outfile;
     outfile.open("score.txt",ios::app);
@@ -92,7 +113,6 @@ int sum()
     }
     int ball[20]={0};
     int score[10]={0};
-    int all_score[10][10]={0};
     int num1=0,num2=0,sum=0;
     for(int x=0;x<10;x++)
     {
@@ -200,16 +220,38 @@ int sum()
             all_score[l][x]=score[l];
         }
     }
-    write_file(all_score);
-    sort(all_score);
     return 0;
 }
 int main()
 {
-    int summary[9];
-    int num1=0,num2=0;
-    char name[10]={'a','b','c','d','e','f','g','h','i','j'};
-    char middle[2]={};
-    sum();
+    string player_name;
+    int num1=0,num2=0,choice1;
+    while(true)
+    {
+        cout<<"是否自定义运动员名字？(1:自定义/2:使用默认字母代替)\n"
+            <<"请输入您的选择：";
+        cin>>choice1;
+        if(choice1==2)
+        {
+        sum();
+        summary_score();
+        write_file();
+        sort();
+        }
+        else if(choice1==1)
+        {
+            class player;
+            for(int i=0;i<10;i++)
+            {
+                cout<<"请输入第"<<i+1<<"个运动员的名字：";
+                cin>>player_name;
+                Player pl(player_name,0);
+            }
+        }
+        else
+        {
+            cout<<"输入错误，请重新输入！\n";   
+        }
+    }
     system("pause");
 }

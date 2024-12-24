@@ -6,18 +6,10 @@
 using namespace std;
 int all_score[10][10]={0};
 int summary[10]={0};
-char name[10]={'a','b','c','d','e','f','g','h','i','j'};
 class Player
 {
 public:
-    Player(string name,int score)
-    {
-        this->pl_name=name;
-        this->pl_score=score;
-    }
-    string pl_name;
-    int pl_score;
-    vector<Player> pl;
+    vector<pair<int,pair<string,int>>> pl;
 };
 int summary_score()
 {
@@ -31,15 +23,19 @@ int summary_score()
         summary[i]=sum;
         sum=0;
     }
+    return 0;
 }
-int sort()
+int sort(vector<pair<int,pair<string,int>>> pl)
 {
-    char middle[2]={};
+    string mid;
     int s_summary[10]={0};
-    char s_name[10]={};
+    string s_name[10];
     int num1=0,sum=0;
-    memcpy(s_summary,summary,10*sizeof(int));
-    memcpy(s_name,name,10*sizeof(char));
+    for(int i=0;i<10;i++)
+    {
+        s_summary[i]=pl[i].second.second;
+        s_name[i]=pl[i].second.first;
+    }
     for(int j=0;j<10;j++)
     {
         for(int k=0;k<10;k++)
@@ -47,11 +43,11 @@ int sort()
            if(s_summary[k]<=s_summary[j])
            {
                num1=s_summary[k];
-               middle[1]=s_name[k];
+               mid=s_name[k];
                s_summary[k]=s_summary[j];
                s_name[k]=s_name[j];
                s_summary[j]=num1;
-               s_name[j]=middle[1];
+               s_name[j]=mid;
            }
         }
     }
@@ -69,9 +65,14 @@ int sort()
     outfile.close();
     return 0;
 }
-int write_file()
+int write_file(vector<pair<int,pair<string,int>>> pl)
 {
     int sum;
+    string name[10];
+    for(int i=0;i<10;i++)
+    {
+        name[i]=pl[i].second.first;
+    }
     ofstream outfile;
     outfile.open("score.txt",ios::app);
     for(int i=0;i<10;i++)
@@ -224,8 +225,10 @@ int sum()
 }
 int main()
 {
+    Player player;
     string player_name;
     int num1=0,num2=0,choice1;
+    char name[10]={'A','B','C','D','E','F','G','H','I','J'};
     while(true)
     {
         cout<<"是否自定义运动员名字？(1:自定义/2:使用默认字母代替)\n"
@@ -233,25 +236,36 @@ int main()
         cin>>choice1;
         if(choice1==2)
         {
-        sum();
-        summary_score();
-        write_file();
-        sort();
+            sum();
+            summary_score();
+            for(int i=0;i<10;i++)
+            {
+                player.pl.push_back(make_pair(i,make_pair(string(1,name[i]),summary[i])));
+            }
+            write_file(player.pl);
+            sort(player.pl);
+            break;
         }
         else if(choice1==1)
         {
-            class player;
-            for(int i=0;i<10;i++)
+            sum();
+            summary_score();
+            for(int k=0;k<10;k++)
             {
-                cout<<"请输入第"<<i+1<<"个运动员的名字：";
+                cout<<"请输入第"<<k+1<<"个运动员的名字：";
                 cin>>player_name;
-                Player pl(player_name,0);
+                player.pl.push_back(make_pair(k,make_pair(player_name,summary[k])));
             }
+            write_file(player.pl);
+            sort(player.pl);
+            break;
         }
         else
         {
             cout<<"输入错误，请重新输入！\n";   
+            continue;
         }
     }
     system("pause");
+    return 0;
 }
